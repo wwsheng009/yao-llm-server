@@ -12,11 +12,6 @@ from loguru import logger
 from pydantic import BaseModel, Field
 from starlette.middleware.cors import CORSMiddleware
 
-from langchain.text_splitter import SpacyTextSplitter
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.text_splitter import CharacterTextSplitter
-
-
 # sys.path.append('..')
 from text2vec import SentenceModel
 
@@ -80,42 +75,6 @@ async def emb(item: Item):
         logger.error(e)
         return {'status': False, 'msg': e}, 400
 
-
-text_splitter = RecursiveCharacterTextSplitter(
-    # Set a really small chunk size, just to show.
-    chunk_size = 256,
-    chunk_overlap  = 20
-)
-
-text_splitter2 = CharacterTextSplitter(
-    separator = "\n",
-    chunk_size = 256,
-    chunk_overlap  = 20
-)
-
-@app.post('/chunk')
-async def chunk(item: Item2):
-    try:
-        # text_splitter = SpacyTextSplitter()
-        # docs = text_splitter.split_text(item.input)
-        docs = text_splitter2.create_documents([item.input])
-
-        logger.debug(f"Successfully get chunking")
-        return docs
-    except Exception as e:
-        logger.error(e)
-        return {'status': False, 'msg': e}, 400
-
-import loader
-@app.post('/load_file')
-async def emb(doc: loader.RequestModel):
-    try:
-        loader.load_file(doc)
-        logger.debug(f"Successfully load file, q:{doc}")
-        return "ok"
-    except Exception as e:
-        logger.error(e)
-        return {'status': False, 'msg': e}, 400
 
 
 if __name__ == '__main__':

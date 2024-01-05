@@ -46,6 +46,9 @@ embedding 功能使用 text2vec 加载本地模型
 
 ```sh
 pip install torch text2vec
+
+# 如果服务器没有gpu,只是使用cpu，torch是无法直接安装的
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 ```
 
 ```py
